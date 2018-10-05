@@ -2,4 +2,6 @@ venv/
 venv@2/
 .idea/
 .DS_Store
+*.html
+*.txt
 

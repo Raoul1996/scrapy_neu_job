@@ -3,18 +3,11 @@ import scrapy
 
 class Tutorial(scrapy.Spider):
     name = "tutorial"
-
-    def start_requests(self):
-        """
-        start the spider request, and developer need provide a urls list.
-        then, yield the html content to 'self.parse' function
-        """
-        urls = [
-            'http://lab.scrapyd.cn/page/1/',
-            'http://lab.scrapyd.cn/page/2/'
-        ]
-        for url in urls:
-            yield scrapy.Request(url=url, callback=self.parse)
+    start_urls = [
+        'http://lab.scrapyd.cn/',
+        'http://lab.scrapyd.cn/page/1/',
+        'http://lab.scrapyd.cn/page/2/',
+    ]
 
     def parse(self, response):
         """
