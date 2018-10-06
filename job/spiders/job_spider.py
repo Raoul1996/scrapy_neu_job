@@ -76,8 +76,8 @@ class JobSpider(scrapy.Spider):
                     item['info_from'] = 3
                     item['pos_list'].append({
                         'id': pos.css('td::text').extract()[0],
-                        'name': pos.css('td::text').extract()[1],
-                        'subject': pos.css('td a::text').extract()[0],
+                        'subject': pos.css('td::text').extract()[1],
+                        'name': pos.css('td a::text').extract()[0],
                         'hc': pos.css('td::text').extract()[2]
                     })
                     item['sub_link'] = pos.css('td a::attr(href)').extract()[0],
