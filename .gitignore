@@ -4,4 +4,5 @@ venv@2/
 .DS_Store
 *.html
 *.txt
+job.json
 

@@ -5,7 +5,14 @@ import logging
 
 class ListSpider(scrapy.Spider):
     name = 'list'
-    start_urls = ['http://lab.scrapyd.cn']
+
+    # start_urls = ['http://lab.scrapyd.cn/']
+    def start_requests(self):
+        url = 'http://lab.scrapyd.cn/'
+        tag = getattr(self, 'tag', None)
+        if tag is not None:
+            url = url + 'tag/' + tag
+        yield scrapy.Request(url=url, callback=self.parse)
 
     def parse(self, response):
         quotes = response.css('div.quote')
