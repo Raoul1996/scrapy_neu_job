@@ -1,0 +1,6 @@
+*.json
+*.pyc
+.vscode/
+.idea/
+venv/
+README.md
