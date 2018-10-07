@@ -46,7 +46,7 @@ class JobSpider(scrapy.Spider):
         item = CompanyItem()
         # common info
         item['title'] = response.css('.viewHead h1::text').extract_first()
-        item['link'] = self.base_url + response.css('.viewHead a::attr(href)').extract_first()
+        item['link'] = response.url
         item['quality'] = response.css('ul.xInfo.xInfo-2 li span::text').extract()[0]
         item['industry'] = response.css('ul.xInfo.xInfo-2 li span::text').extract()[1]
         item['size'] = response.css('ul.xInfo.xInfo-2 li span::text').extract()[2]
@@ -63,10 +63,19 @@ class JobSpider(scrapy.Spider):
             item['phone'] = phone
         except:
             pass
+        v_tab2 = response.css('#vTab2')
+        if re.search(self.pattern, unicode(v_tab2.extract_first())):
+            item['info_from'] = 2
+        v_tab1 = response.css('#vTab1')
+        if re.search(self.pattern, unicode(v_tab1.extract_first())):
+            item['info_from'] = 1
+        if v_tab1.css('table'):
+            # 通常企业方会在描述中添加自己的 table， 用来描述自己的招聘需求
+            item['addon_table'] = v_tab1.css('table').extract_first()
 
-        has_pos_list = response.css('ul#vTab3.xInfo table').extract_first()
+        pos_table = response.css('ul#vTab3.xInfo table').extract_first()
 
-        if has_pos_list is not None:
+        if pos_table is not None:
             item['has_pos_list'] = 1
             pos_list = response.css('ul#vTab3.xInfo table tr')[1:]
             item['pos_list'] = []
@@ -78,24 +87,18 @@ class JobSpider(scrapy.Spider):
                         'id': pos.css('td::text').extract()[0],
                         'subject': pos.css('td::text').extract()[1],
                         'name': pos.css('td a::text').extract()[0],
+                        'job_url': pos.css('td a::attr(href)').extract()[0],
                         'hc': pos.css('td::text').extract()[2]
                     })
-                    item['sub_link'] = pos.css('td a::attr(href)').extract()[0],
         else:
             item['has_pos_list'] = 0
             item['pos_list'] = ''
             filename = 'no_pos_table_list.txt'
+
+            # 标记没有添加职位列表的企业，写入文件
             with open(filename, 'a+') as f:
                 f.write(response.url.encode('utf-8'))
                 f.write('\n\n')
                 f.close()
 
-        v_tab1 = response.css('#vTab1')
-        if re.search(self.pattern, unicode(v_tab1.extract_first())):
-            item['info_from'] = 1
-        if v_tab1.css('table'):
-            item['addon_table'] = v_tab1.css('table').extract()
-        v_tab2 = response.css('#vTab2')
-        if re.search(self.pattern, unicode(v_tab2.extract_first())):
-            item['info_from'] = 2
         yield item
