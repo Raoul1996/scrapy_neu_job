@@ -11,7 +11,7 @@ class JobSpider(scrapy.Spider):
     base_url = 'http://jobneu.jysd.com'
     start_urls = ['http://jobneu.jysd.com/teachin/']
     # 会计，财务，出纳
-    pattern = re.compile(u'会计|财务|出纳')
+    pattern = re.compile(u'运营|测试|产品|管培生')
 
     def parse(self, response):
         job_list = response.css('.infoBox ul.infoList.teachinList')

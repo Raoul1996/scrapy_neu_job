@@ -16,7 +16,7 @@ pps: use python 2.7
 ```bash
 git clone https://github.com/Raoul1996/scrapy_neu_job.git scrapy
 source ./venv/bin/active
-pip install -r requirement.txt
+pip install -r requirement.list
 scrapy crawl job -o job.json
 ```
 
